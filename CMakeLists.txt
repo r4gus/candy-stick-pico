@@ -13,22 +13,31 @@ project(my_project)
 # initialize the Raspberry Pi Pico SDK
 pico_sdk_init()
 
+add_subdirectory(deps)
+
 # rest of your project
 add_executable(candystick
-    src/c/usb_descriptors.c    
+    # tinyusb
+    src/c/usb_descriptors.c
+    # little fs
+    src/c/rpi_pico_lfs.c
 )
 
 target_include_directories(candystick PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/include
+    # little fs
+    ${CMAKE_BINARY_DIR}/_deps/littlefs-src
 )
 
 target_link_libraries(candystick PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/zig-out/lib/libcandystick-app.a 
     pico_stdlib
     pico_time
+    hardware_flash
     tinyusb_device 
     tinyusb_board
     tinyusb_additions
+    littlefs
 )
 
 # create map/bin/hex/uf2 file in addition to ELF

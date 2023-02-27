@@ -1,5 +1,5 @@
 const std = @import("std");
-const ctaphid = @import("fido").ctaphid;
+const lfs = @import("lfs.zig");
 
 //--------------------------------------------------------------------+
 // Extern
@@ -58,6 +58,7 @@ fn tudTask() void {
 
 export fn main() void {
     board_init();
+    lfs.mount() catch unreachable;
 
     // init device stack on configured roothub port.
     _ = tud_init(0);
